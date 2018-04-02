@@ -11,8 +11,7 @@ import SafariServices
 
 class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,  UISearchResultsUpdating , UISearchBarDelegate, SFSafariViewControllerDelegate {
     
-    final let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us&sortBy=publishedAt&apiKey=cfcc751f9b724387868fc8f22d04d4fa")
-    
+    final let url = URL(string: "https://newsapi.org/v2/top-headlines?country=ua&sortBy=publishedAt&apiKey=cfcc751f9b724387868fc8f22d04d4fa")
     private var articles = [Article]()
     var filteredArticles = [Article]()
     var shouldShowSearchResults = false
@@ -53,6 +52,9 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
                 let news = try decoder.decode(News.self, from: data)
+                //=====
+                
+                
                 dump(news)
                 
                 let encoder = JSONEncoder()
@@ -132,11 +134,10 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-        
-        
         return cell
     }
     
+    //MARK: Open url
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if shouldShowSearchResults {
@@ -158,7 +159,7 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     
-    // MARK:  pagination
+    
     private func tableView(_ tableView: UITableView, willDisplay cell: NewsTableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == articles.count - 1 {
             moreData()
@@ -171,7 +172,7 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.reloadData()
     }
     
-    
+    // MARK: Search Controller
     func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
@@ -179,7 +180,6 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
-        
         self.tableView.tableHeaderView = searchController.searchBar
     }
     
@@ -200,7 +200,6 @@ class NewsViewController: UIViewController, UITableViewDataSource, UITableViewDe
         shouldShowSearchResults = true
         tableView.reloadData()
     }
-    
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         shouldShowSearchResults = false
